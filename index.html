@@ -2,37 +2,40 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <title>Registro de Participações</title>
+  <title>Exportar para Excel</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-  <h1>Enviar Participação</h1>
-  <form id="form">
-    <label>Nome: <input type="text" name="nome" required></label><br>
-    <label>Participação: <input type="text" name="participacao" required></label><br>
-    <button type="submit">Enviar</button>
+
+  <h2>Enviar Nome e Participação</h2>
+  <form id="formulario">
+    <input type="text" id="nome" placeholder="Nome" required>
+    <input type="text" id="participacao" placeholder="Participação" required>
+    <button type="submit">Exportar Excel</button>
   </form>
 
-  <p id="resposta"></p>
-
   <script>
-    const form = document.getElementById('form');
-    const resposta = document.getElementById('resposta');
-
-    form.addEventListener('submit', function(e) {
+    document.getElementById("formulario").addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const data = new FormData(form);
-      const url = "https://script.google.com/macros/s/AKfycbxtb-SK9g-qiJXqTJBIaxNCCOCTEkk6A97E8fZh3rd-m38qP-_VVKXxvcEUuUir1MHMFA/exec"; // <-- Coloca o link do Google Apps Script
+      const nome = document.getElementById("nome").value;
+      const participacao = document.getElementById("participacao").value;
 
-      fetch(url, {
-        method: "POST",
-        mode: "no-cors",
-        body: data
-      });
+      // Dados para exportar
+      const dados = [
+        ["Nome", "Participação"],  // Cabeçalhos
+        [nome, participacao]       // Linha com dados
+      ];
 
-      resposta.textContent = "Dados enviados com sucesso!";
-      form.reset();
+      // Criar worksheet e workbook
+      const ws = XLSX.utils.aoa_to_sheet(dados);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Participantes");
+
+      // Gerar arquivo
+      XLSX.writeFile(wb, "participantes.xlsx");
     });
   </script>
+
 </body>
 </html>
