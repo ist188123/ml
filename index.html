@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Participações</title>
+</head>
+<body>
+  <h1>Enviar Participação</h1>
+  <form id="form">
+    <label>Nome: <input type="text" name="nome" required></label><br>
+    <label>Participação: <input type="text" name="participacao" required></label><br>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <p id="resposta"></p>
+
+  <script>
+    const form = document.getElementById('form');
+    const resposta = document.getElementById('resposta');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      const url = "COLA_AQUI_O_URL_DA_TUA_WEBAPP"; // <-- Coloca o link do Google Apps Script
+
+      fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        body: data
+      });
+
+      resposta.textContent = "Dados enviados com sucesso!";
+      form.reset();
+    });
+  </script>
+</body>
+</html>
